@@ -1,8 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "EnemyAIController.h"
 #include "Engine.h"
 #include "EnemyAI.h"
-#include "EnemyAIController.h"
+
 
 //"OnMoveCompleted" Called on completing current movement request
 void AEnemyAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
