@@ -20,6 +20,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	float SprintMovementSpeed;
+	float NormalMovementSpeed;
+
 public:	
 
 	UPROPERTY(EditAnywhere)
@@ -43,6 +46,11 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void BlueprintReload();
+
+	UFUNCTION(Server, Reliable)
+		void ServerSprintStart();
+	UFUNCTION(Server, Reliable)
+		void ServerSprintEnd();
 
 private:
 
