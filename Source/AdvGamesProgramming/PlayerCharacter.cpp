@@ -12,7 +12,7 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	//AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	//Set default member variable values
 	LookSensitivity = 1.0f;
@@ -102,12 +102,14 @@ void APlayerCharacter::LookUp(float Value)
 	*/
 	FRotator LookUpRotation = FRotator::ZeroRotator;
 	LookUpRotation.Pitch = Value * LookSensitivity;
-	if (Camera->RelativeRotation.Pitch + LookUpRotation.Pitch < 90.0f
-		&& Camera->RelativeRotation.Pitch + LookUpRotation.Pitch > -90.0f)
-	{
-		Camera->AddRelativeRotation(LookUpRotation);
-		Camera->RelativeRotation.Yaw = 0.0f;
-		Camera->RelativeRotation.Roll = 0.0f;
+	if (Camera) {
+		if (Camera->RelativeRotation.Pitch + LookUpRotation.Pitch < 90.0f
+			&& Camera->RelativeRotation.Pitch + LookUpRotation.Pitch > -90.0f)
+		{
+			Camera->AddRelativeRotation(LookUpRotation);
+			Camera->RelativeRotation.Yaw = 0.0f;
+			Camera->RelativeRotation.Roll = 0.0f;
+		}
 	}
 }
 
