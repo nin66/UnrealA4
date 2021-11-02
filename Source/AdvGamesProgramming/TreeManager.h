@@ -29,7 +29,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Houses")
 		TArray<class AHouse*> AllHouses; //array to store/delete the houses
+	UPROPERTY(Replicated)
 	float RandomRotation; //used to randomize the rotation
 
-	
+	UPROPERTY(Replicated)
+	float RandomNumber1;
+	UPROPERTY(Replicated)
+	float RandomNumber;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };

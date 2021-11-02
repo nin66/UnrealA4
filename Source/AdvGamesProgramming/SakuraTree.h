@@ -22,12 +22,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 		UStaticMeshComponent* Tree; //used to form the tree just like in winter but we will also attach the tree leaves to it 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 		UStaticMeshComponent* TreeLeaves; //mesh for the sakura leaves 
 
 
 	float RandomHeight; //randomize height just like tree.cpp
-
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };

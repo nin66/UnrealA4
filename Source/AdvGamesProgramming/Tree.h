@@ -24,10 +24,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 		UStaticMeshComponent* Tree; //used to form the tree in winter
 	
+	UPROPERTY(Replicated)
 	float RandomHeight; //used to randomise height 
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 };

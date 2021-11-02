@@ -6,6 +6,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/StaticMesh.h"
 #include "Components/InputComponent.h"
+#include "Net/UnrealNetwork.h"
 
 
 // Sets default values
@@ -30,7 +31,7 @@ ATree::ATree()
 	//Use the constructor helper to find the tree material from the engine so that we can access it via code
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> TreeMaterial(TEXT("MaterialInstanceConstant'/Game/Materials/PCGMaterials/TreeMaterial_Inst.TreeMaterial_Inst'"));
 	Tree->SetMaterial(0, TreeMaterial.Object); //set the material of the tree to the tree material so that it has the colour of a tree log with snow on top 
-
+	Tree->SetIsReplicated(true);
 	
 }
 
@@ -46,6 +47,14 @@ void ATree::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ATree::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATree, Tree);
+	DOREPLIFETIME(ATree, RandomHeight);
 }
 
 

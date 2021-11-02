@@ -7,6 +7,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/StaticMesh.h"
 #include "Components/InputComponent.h"
+#include "Net/UnrealNetwork.h"
 // Sets default values
 ASakuraTree::ASakuraTree()
 {
@@ -62,5 +63,13 @@ void ASakuraTree::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ASakuraTree::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASakuraTree, Tree);
+	DOREPLIFETIME(ASakuraTree, TreeLeaves);
 }
 

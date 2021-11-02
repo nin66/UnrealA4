@@ -6,6 +6,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/StaticMesh.h"
 #include "Components/InputComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AHouse::AHouse()
@@ -57,5 +58,14 @@ void AHouse::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AHouse::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AHouse, House);
+	DOREPLIFETIME(AHouse, HouseRoof);
+	DOREPLIFETIME(AHouse, RandomScale);
 }
 

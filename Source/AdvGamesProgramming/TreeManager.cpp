@@ -5,6 +5,7 @@
 #include"Tree.h"
 #include "House.h"
 #include "EngineUtils.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ATreeManager::ATreeManager()
@@ -37,8 +38,8 @@ void ATreeManager::Tick(float DeltaTime)
 void ATreeManager::GenerateTrees(const TArray<FVector>& Vertices, int32 Width, int32 Height)
 {
 	//initialise 2 random floats to help the randomization of tree and house generation
-	float RandomNumber1 = FMath::RandRange(1, Vertices.Num() - 1); 
-	float RandomNumber = FMath::RandRange(0, Vertices.Num() - Width);
+	RandomNumber1 = FMath::RandRange(1, Vertices.Num() - 1); 
+	RandomNumber = FMath::RandRange(0, Vertices.Num() - Width);
 
 	//further empties all the meshes in the world just before we regenerate them
 	for (TActorIterator<ATree> It(GetWorld()); It; ++It)
@@ -76,6 +77,15 @@ void ATreeManager::GenerateTrees(const TArray<FVector>& Vertices, int32 Width, i
 		
 	}
 
+}
+
+void ATreeManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATreeManager, RandomNumber);
+	DOREPLIFETIME(ATreeManager, RandomRotation);
+	DOREPLIFETIME(ATreeManager, RandomNumber1);
 }
 
 

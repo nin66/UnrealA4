@@ -4,6 +4,7 @@
 #include "ShrubManager.h"
 #include "GrassShrub.h"
 #include "House.h"
+#include "Net/UnrealNetwork.h"
 #include "EngineUtils.h"
 
 
@@ -37,8 +38,8 @@ void AShrubManager::Tick(float DeltaTime)
 void AShrubManager::GenerateShrubs(const TArray<FVector>& Vertices, int32 Width, int32 Height)
 {
 	//initialise 2 random floats to help the randomization of tree and house generation
-	float RandomNumber1 = FMath::RandRange(1, Vertices.Num() - 1);
-	float RandomNumber = FMath::RandRange(0, Vertices.Num() - Width);
+	 RandomNumber1 = FMath::RandRange(1, Vertices.Num() - 1);
+	 RandomNumber = FMath::RandRange(0, Vertices.Num() - Width);
 	
 	//further empties all the meshes in the world just before we regenerate them
 	for (TActorIterator<AGrassShrub> It(GetWorld()); It; ++It)
@@ -71,5 +72,13 @@ void AShrubManager::GenerateShrubs(const TArray<FVector>& Vertices, int32 Width,
 			AllHouses.Add(NewHouse);
 		}
 	}
+}
+
+void AShrubManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AShrubManager, RandomNumber);
+	DOREPLIFETIME(AShrubManager, RandomNumber1);
 }
 

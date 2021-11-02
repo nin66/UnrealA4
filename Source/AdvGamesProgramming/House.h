@@ -22,10 +22,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 		UStaticMeshComponent* House; //house mesh 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 		UStaticMeshComponent* HouseRoof; //roof mesh 
+	UPROPERTY(Replicated)
 	float RandomScale; //used to randomise scale of the house
-	
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };

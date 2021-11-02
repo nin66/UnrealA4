@@ -7,6 +7,7 @@
 #include "Engine/StaticMesh.h"
 #include "HealthComponent.h"
 #include "Components/InputComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AGrassShrub::AGrassShrub()
@@ -47,5 +48,13 @@ void AGrassShrub::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AGrassShrub::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AGrassShrub, GrassShrub);
+	DOREPLIFETIME(AGrassShrub, RandomScale);
 }
 
