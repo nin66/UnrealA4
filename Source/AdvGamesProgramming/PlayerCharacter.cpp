@@ -6,11 +6,16 @@
 #include "FirstPersonAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "HealthComponent.h"
+#include "MultiplayerGameMode.h"
+#include "Engine/World.h"
+#include "PlayerHUD.h"
+#include "GameFramework/HUD.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	//AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -30,6 +35,11 @@ void APlayerCharacter::BeginPlay()
 
 	//Initialise the camera variable
 	Camera = FindComponentByClass<UCameraComponent>();
+	//Initialise the health component
+	HealthComponent = FindComponentByClass<UHealthComponent>();
+	//UE_LOG(LogTemp, Warning, TEXT("IM HERE"))
+	if (HealthComponent)
+		HealthComponent->SetIsReplicated(true);
 
 	// Get the skeletal mesh and then get the anim instance from it cast to the first person anim instance.
 	USkeletalMeshComponent* SkeletalMesh = Cast<USkeletalMeshComponent>(GetDefaultSubobjectByName(TEXT("Arms")));
@@ -62,7 +72,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction(TEXT("Reload"), EInputEvent::IE_Pressed, this, &APlayerCharacter::Reload);
 }
 
-void APlayerCharacter::MoveForward(float Value) 
+void APlayerCharacter::MoveForward(float Value)
 {
 	/*
 		What is frame rate independence?
@@ -75,9 +85,9 @@ void APlayerCharacter::MoveForward(float Value)
 		running on a lower framerate.
 
 		Why don't we use DeltaSeconds for movement?
-		
+
 		The CharacterMovementComponent attached to the ACharacter class automatically
-		deals with frame rate independence of movement. This is only the case for the 
+		deals with frame rate independence of movement. This is only the case for the
 		ACharacter class and is not the case for movement applied to APawn class derived
 		actors.
 	*/
@@ -87,12 +97,12 @@ void APlayerCharacter::MoveForward(float Value)
 	AddMovementInput(ForwardRotation.Vector(), Value);
 }
 
-void APlayerCharacter::Strafe(float Value) 
+void APlayerCharacter::Strafe(float Value)
 {
 	AddMovementInput(GetActorRightVector(), Value);
 }
 
-void APlayerCharacter::LookUp(float Value) 
+void APlayerCharacter::LookUp(float Value)
 {
 	/*
 		Why don't we use DeltaSeconds for mouse input?
@@ -106,7 +116,8 @@ void APlayerCharacter::LookUp(float Value)
 	*/
 	FRotator LookUpRotation = FRotator::ZeroRotator;
 	LookUpRotation.Pitch = Value * LookSensitivity;
-	if (Camera) {
+	if (Camera)
+	{
 		if (Camera->RelativeRotation.Pitch + LookUpRotation.Pitch < 90.0f
 			&& Camera->RelativeRotation.Pitch + LookUpRotation.Pitch > -90.0f)
 		{
@@ -117,7 +128,7 @@ void APlayerCharacter::LookUp(float Value)
 	}
 }
 
-void APlayerCharacter::Turn(float Value) 
+void APlayerCharacter::Turn(float Value)
 {
 	AddControllerYawInput(Value * LookSensitivity);
 }
@@ -158,4 +169,42 @@ void APlayerCharacter::Reload()
 {
 	BlueprintReload();
 }
+
+void APlayerCharacter::OnDeath()
+{
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		AMultiplayerGameMode* MultiplayerGameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
+		if (MultiplayerGameMode)
+		{
+			MultiplayerGameMode->Respawn(GetController());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Unable to find the GameMode"))
+		}
+	}
+}
+
+
+void APlayerCharacter::SetPlayerHUDVisibility_Implementation(bool bHUDVisible)
+{
+	if (GetLocalRole() == ROLE_AutonomousProxy)
+	{
+		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		{
+			APlayerHUD* PlayerHUD = Cast<APlayerHUD>(PlayerController->GetHUD());
+			if (PlayerHUD)
+			{
+				bHUDVisible ? PlayerHUD->ShowHUD() : PlayerHUD->HideHUD();
+				UE_LOG(LogTemp, Warning, TEXT("Hiding the HUD"))
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("Can't find HUD on controller. AUTONOMOUS"))
+			}
+		}
+	}
+}
+
 
