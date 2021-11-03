@@ -38,7 +38,7 @@ ARandAIController::ARandAIController()
 //get a random target waypoint from the array with fmath random and cast the return value to correct type
 ATargetPoint* ARandAIController::GetRandomWaypoint()
 {
-	auto index = FMath::RandRange(0, Waypoints.Num() - 1);
+	float index = FMath::RandRange(0, Waypoints.Num() - 1);
 	return Cast<ATargetPoint>(Waypoints[index]);
 }
 
@@ -65,11 +65,11 @@ void ARandAIController::onTargetPerceptionUpdate(AActor* Actor, FAIStimulus Stim
 	PerceptionComponent->GetPerceivedActors(TSubclassOf<UAISense_Sight>(), PerceivedActors);
 
 	//get the number of perceived actors (player and any other enemies that walk past) in the sight field
-	bool isSeen = PerceivedActors.Contains(Actor);
+	bool bIsSeen = PerceivedActors.Contains(Actor);
 	int NumberObjectSeen = PerceivedActors.Num();
 
 	//print string message if actor is seen by ai sight
-	FString text = FString(Actor->GetName() + " has just been " + (isSeen ? "spotted in" : "lost from") + " the enemies' view.");
+	FString text = FString(Actor->GetName() + " has just been " + (bIsSeen ? "spotted in" : "lost from") + " the enemies' view.");
 	//print to debug log
 	if (GEngine)
 	{
