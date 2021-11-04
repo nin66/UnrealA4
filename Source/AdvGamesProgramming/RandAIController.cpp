@@ -18,6 +18,9 @@ void ARandAIController::BeginPlay()
 
 ARandAIController::ARandAIController()
 {
+	// Assign to Team 1
+	SetGenericTeamId(FGenericTeamId(1));
+
 	//create AI perception component
 	PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("SightPerceptionComponent"));
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(FName("Sight Config"));
@@ -26,8 +29,8 @@ ARandAIController::ARandAIController()
 	SightConfig->SightRadius = 700;
 	SightConfig->LoseSightRadius = 800;
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
-	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
 
 	//assign sight to the ai perception component and bind ontarget function
 	PerceptionComponent->ConfigureSense(*SightConfig);
