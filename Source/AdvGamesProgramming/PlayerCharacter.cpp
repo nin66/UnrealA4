@@ -2,7 +2,6 @@
 
 
 #include "PlayerCharacter.h"
-#include "GenericTeamAgentInterface.h"
 #include "Components/InputComponent.h"
 #include "FirstPersonAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -21,18 +20,12 @@ APlayerCharacter::APlayerCharacter()
 
 	//AutoPossessPlayer = EAutoReceiveInput::Player0;
 
-	TeamId = FGenericTeamId(0);
 	//Set default member variable values
 	LookSensitivity = 1.0f;
 	SprintMultiplier = 1.5f;
 
 	SprintMovementSpeed = GetCharacterMovement()->MaxWalkSpeed * SprintMultiplier;
 	NormalMovementSpeed = GetCharacterMovement()->MaxWalkSpeed;
-}
-
-FGenericTeamId APlayerCharacter::GetGenericTeamId() const
-{
-	return TeamId;
 }
 
 // Called when the game starts or when spawned
