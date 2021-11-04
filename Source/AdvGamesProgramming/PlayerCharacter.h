@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
-class ADVGAMESPROGRAMMING_API APlayerCharacter : public ACharacter
+class ADVGAMESPROGRAMMING_API APlayerCharacter : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -66,7 +67,11 @@ public:
 		void ResetModelVisibility();
 
 private:
+	FGenericTeamId TeamId;
 
 	UCameraComponent* Camera;
 	class UFirstPersonAnimInstance* AnimInstance;
+	
+public:
+	virtual FGenericTeamId GetGenericTeamId() const override;
 };
