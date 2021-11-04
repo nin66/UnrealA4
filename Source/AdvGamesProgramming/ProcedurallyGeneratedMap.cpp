@@ -21,6 +21,7 @@
 #include "SpringManager.h"
 #include "SakuraTree.h"
 #include "House.h"
+#include "AutumnManager.h"
 
 
 // Sets default values
@@ -45,16 +46,20 @@ AProcedurallyGeneratedMap::AProcedurallyGeneratedMap()
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> SakuraMat(TEXT("MaterialInstanceConstant'/Game/Materials/PCGMaterials/Spring/SakuraLandScapeMaterial_Inst.SakuraLandScapeMaterial_Inst'"));
 	SakuraMaterial = SakuraMat.Object; //Same as before to be able to access it for other methods in this cpp file. This is because i can only use constructor helpers in the constructor. 
 	
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> AutumnMat(TEXT("MaterialInstanceConstant'/Game/Materials/PCGMaterials/Autumn/AutumnLandScapeMaterial_Inst.AutumnLandScapeMaterial_Inst'"));
+	AutumnMaterial = AutumnMat.Object; //Same as before to be able to access it for other methods in this cpp file. This is because i can only use constructor helpers in the constructor. 
+
 	//Using constructor helpers to access the niagara systems from content browser
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> Snow(TEXT("NiagaraSystem'/Game/Assets/Niagara/SnowNiagaraEmitter_System.SnowNiagaraEmitter_System'"));
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> Rain(TEXT("NiagaraSystem'/Game/Assets/Niagara/RainNiagaraEmitter_System.RainNiagaraEmitter_System'"));
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> Sakura(TEXT("NiagaraSystem'/Game/Assets/Niagara/SakuraNiagaraEmitter_System.SakuraNiagaraEmitter_System'"));
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> Autumn(TEXT("NiagaraSystem'/Game/Assets/Niagara/AutumnNiagaraEmitter_System.AutumnNiagaraEmitter_System'"));
 	
 	//Assigning the objects to the <UNiagaraSystem*> variables to be able to access it for other methods in this cpp file 
 	RainEffect = Rain.Object;
 	SnowEffect = Snow.Object;
 	SakuraEffect = Sakura.Object; 
-	
+	AutumnEffect = Autumn.Object;
 	
 
 }
@@ -68,7 +73,7 @@ void AProcedurallyGeneratedMap::BeginPlay()
 
 	//The particles will fall as soon as I play the project in the specific seasons provided. 
 	//If it is in the winter season - only activating Winter manager
-	if (WinterManager && !SummerManager && !SpringManager) {
+	if (WinterManager && !SummerManager && !SpringManager && !AutumnManager) {
 		NewEffect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			this,
 			SnowEffect,                                           //The niagara system of snow fall will be activated via the SpawnSystemAtLocation function from the UNiagaraFunctionLibrary
@@ -77,7 +82,7 @@ void AProcedurallyGeneratedMap::BeginPlay()
 			FVector::OneVector);
 	}
 	//If it is in the summer season - only activating Summer manager
-	else if (SummerManager && !WinterManager && !SpringManager)
+	else if (SummerManager && !WinterManager && !SpringManager && !AutumnManager)
 	{
 		NewEffect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			this,
@@ -87,12 +92,22 @@ void AProcedurallyGeneratedMap::BeginPlay()
 			FVector::OneVector);
 	}
 	//If it is in the spring season - only activating Spring manager
-	else if (SpringManager && !WinterManager && !SummerManager)
+	else if (SpringManager && !WinterManager && !SummerManager && !AutumnManager)
 	{
 		NewEffect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			this,
 			SakuraEffect,
 			FVector(2850, 3430, 4890),                           //The niagara system of sakura flower fall will be activated via the SpawnSystemAtLocation function from the UNiagaraFunctionLibrary
+			FRotator::ZeroRotator,
+			FVector::OneVector);
+	}
+
+	else if (AutumnManager && !SpringManager && !WinterManager && !SummerManager)
+	{
+		NewEffect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			this,
+			AutumnEffect,
+			FVector(2850, 3430, 4890),                           //The niagara system of autumn leaves fall will be activated via the SpawnSystemAtLocation function from the UNiagaraFunctionLibrary
 			FRotator::ZeroRotator,
 			FVector::OneVector);
 	}
@@ -154,24 +169,29 @@ void AProcedurallyGeneratedMap::GenerateMap()
 	}
 
 	//This section will check if it the season we've chosen and then randomly generate the terrain based on that season
-	if (WinterManager && !SummerManager && !SpringManager) //if we chose a winter terrain
+	if (WinterManager && !SummerManager && !SpringManager && !AutumnManager) //if we chose a winter terrain
 	{
 		MeshComponent->SetMaterial(0, SnowMaterial); //change the material of the mesh we made from the labs to the snow material 
 		WinterManager->GenerateTrees(Vertices, Width, Height); //generate random number of trees and houses and its location based on the vertices array, width and height of the mesh component
 		
 	}
 
-    if (SummerManager && !WinterManager && !SpringManager) //if we chose a summer terrain 
+    if (SummerManager && !WinterManager && !SpringManager && !AutumnManager) //if we chose a summer terrain 
 	{
 		
 		MeshComponent->SetMaterial(0, SandMaterial); //change the material of the mesh we made from the labs to the sand material, which will look like some sort of a beach
 		SummerManager->GenerateShrubs(Vertices, Width, Height); //generate random number of shrubs and houses and its location based on the vertices array, width and height of the mesh component
 	
 	}
-	 if (SpringManager && !WinterManager && !SummerManager) //if we chose a spring terrain 
+	 if (SpringManager && !WinterManager && !SummerManager && !AutumnManager) //if we chose a spring terrain 
 	{
 		MeshComponent->SetMaterial(0, SakuraMaterial); //change the material of the mesh we made from the labs to the sakura material, which will look like some sort of a beach
 		SpringManager->GenerateSakuraTrees(Vertices, Width, Height); //generate random number of trees and houses and its location based on the vertices array, width and height of the mesh component
+	}
+	 if (AutumnManager && !WinterManager && !SummerManager && !SpringManager)
+	 {
+		 MeshComponent->SetMaterial(0, AutumnMaterial);
+		 AutumnManager->GenerateTrees(Vertices, Width, Height);
 	}
 
 }

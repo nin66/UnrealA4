@@ -57,10 +57,13 @@ public:
 		class AShrubManager* SummerManager; //Summer manager generates the summer terrain. 
 	UPROPERTY(EditAnywhere)
 		class ASpringManager* SpringManager; //Spring manager generates the spring terrain. 
+	UPROPERTY(EditAnywhere)
+		class AAutumnManager* AutumnManager; //Autumn manager generates the autumn terrain. 
 
 	//Material interfaces for each season
 	UMaterialInterface* SnowMaterial; //Snow material for a snowy surface 
 	UMaterialInterface* SandMaterial; //Sand material for a beach-like surface
+	UMaterialInterface* AutumnMaterial; //Sand material for a beach-like surface
 	UMaterialInterface* SakuraMaterial; //Sakura material with a sakura-filled surface
 
 	//Niagara particle systems for the falling items for each season
@@ -72,6 +75,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Sakura")
 		UNiagaraSystem* SakuraEffect; //Sakura effect to simulate sakura flowers falling
+	UPROPERTY(EditAnywhere, Category = "Autumn")
+		UNiagaraSystem* AutumnEffect; //Sakura effect to simulate sakura flowers falling
 
 	class UNiagaraComponent* NewEffect; //The niagara component to spawn the niagara systems 
 	// Called every frame

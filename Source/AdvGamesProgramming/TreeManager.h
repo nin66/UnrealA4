@@ -25,7 +25,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Trees")
 		TArray<class ATree*> AllTrees; //array to store/delete the trees
 
-	void GenerateTrees(const TArray<FVector>& Vertices, int32 Width, int32 Height); //method to generate the trees and the houses
+	virtual void GenerateTrees(const TArray<FVector>& Vertices, int32 Width, int32 Height); //method to generate the trees and the houses
 
 	UPROPERTY(VisibleAnywhere, Category = "Houses")
 		TArray<class AHouse*> AllHouses; //array to store/delete the houses
