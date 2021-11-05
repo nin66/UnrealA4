@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "RandAIController.h"
+#include "HealthComponent.h"
 #include "Engine.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
@@ -80,3 +81,9 @@ void ARandAIController::onTargetPerceptionUpdate(AActor* Actor, FAIStimulus Stim
 	}
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 }
+
+void ARandAIController::OnDeath()
+{
+
+}
+
