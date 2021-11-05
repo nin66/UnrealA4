@@ -15,6 +15,8 @@ UHealthComponent::UHealthComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	MaxHealth = 100.0f;
+    
+
 	// ...
 }
 
@@ -25,7 +27,7 @@ void UHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentHealth = MaxHealth;
-	
+	Score = 100;
 }
 
 
@@ -33,7 +35,7 @@ void UHealthComponent::BeginPlay()
 void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	
 	// ...
 }
 
@@ -57,6 +59,7 @@ void UHealthComponent::OnTakeDamage(float Damage)
 		if (GetOwner()->GetLocalRole() == ROLE_Authority && OwnerPawn->IsLocallyControlled())
 		{
 			UpdateHealthBar();
+			
 		}
 	}
 }
@@ -67,6 +70,7 @@ void UHealthComponent::OnDeath()
 	if (PlayerCharacter)
 	{
 		PlayerCharacter->OnDeath();
+		
 	}
 }
 
@@ -77,6 +81,7 @@ float UHealthComponent::HealthPercentageRemaining()
 
 void UHealthComponent::UpdateHealthBar()
 {
+	
 	if (GetOwner()->GetLocalRole() == ROLE_AutonomousProxy || (GetOwner()->GetLocalRole() == ROLE_Authority && Cast<APawn>(GetOwner())->IsLocallyControlled()))
 	{
 		APlayerHUD* PlayerHUD = Cast<APlayerHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
