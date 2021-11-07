@@ -9,7 +9,7 @@
 
 void AAutumnManager::GenerateTrees(const TArray<FVector>& Vertices, int32 Width, int32 Height)
 {
-	//ATreeManager::GenerateTrees(const TArray<FVector>& Vertices, int32 Width, int Height);
+	//This overrides the generate trees method of the tree manager so that we are spawning autumn trees, instead of logs
 	//initialise 2 random floats to help the randomization of tree and house generation
 	RandomNumber1 = FMath::RandRange(1, Vertices.Num() - 1);
 	RandomNumber = FMath::RandRange(0, Vertices.Num() - Width);

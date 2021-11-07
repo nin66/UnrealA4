@@ -188,10 +188,10 @@ void AProcedurallyGeneratedMap::GenerateMap()
 		MeshComponent->SetMaterial(0, SakuraMaterial); //change the material of the mesh we made from the labs to the sakura material, which will look like some sort of a beach
 		SpringManager->GenerateSakuraTrees(Vertices, Width, Height); //generate random number of trees and houses and its location based on the vertices array, width and height of the mesh component
 	}
-	 if (AutumnManager && !WinterManager && !SummerManager && !SpringManager)
+	 if (AutumnManager && !WinterManager && !SummerManager && !SpringManager) //if we chose an autumn terrain
 	 {
-		 MeshComponent->SetMaterial(0, AutumnMaterial);
-		 AutumnManager->GenerateTrees(Vertices, Width, Height);
+		 MeshComponent->SetMaterial(0, AutumnMaterial); //change the material of the mesh we made from the labs to the autumn material, which will look like leaves surrounding the surface
+		 AutumnManager->GenerateTrees(Vertices, Width, Height); //generate random number of trees and houses and its location based on the vertices array, width and height of the mesh component
 	}
 
 }

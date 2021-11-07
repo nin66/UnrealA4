@@ -41,7 +41,7 @@ void UHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UHealthComponent, CurrentHealth);
+	DOREPLIFETIME(UHealthComponent, CurrentHealth); //Replicate the current health just like the labs
 }
 
 void UHealthComponent::OnTakeDamage(float Damage)
@@ -49,30 +49,30 @@ void UHealthComponent::OnTakeDamage(float Damage)
 	CurrentHealth -= Damage;
 	if (CurrentHealth <= 0.0f)
 	{
-		CurrentHealth = 0;
+		CurrentHealth = 0; //if the player's health is 0, it will die and then proceed to the OnDeath function
 		OnDeath();
 	}
 	if (APawn* Pawn = Cast<APawn>(GetOwner()))
 	{
 		if (GetOwner()->GetLocalRole() == ROLE_Authority && Pawn->IsLocallyControlled())
 		{
-			UpdateHealthBar();
+			UpdateHealthBar(); //update the healthbar for a listen server
 		}
 	}
 }
 
 void UHealthComponent::OnDeath()
 {
-	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner());
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner()); //gets the dying character
 	if (PlayerCharacter)
 	{
-		PlayerCharacter->OnDeath();
+		PlayerCharacter->OnDeath(); //proceed to with the on death procedure, then respawns 
 	}
 }
 
 float UHealthComponent::HealthPercentageRemaining()
 {
-	return CurrentHealth / MaxHealth * 100.0f;
+	return CurrentHealth / MaxHealth * 100.0f; //returns the current health
 }
 
 void UHealthComponent::UpdateHealthBar()
@@ -83,7 +83,7 @@ void UHealthComponent::UpdateHealthBar()
 			APlayerHUD* PlayerHUD = dynamic_cast<APlayerHUD*>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
 			if (PlayerHUD)
 			{
-				PlayerHUD->SetPlayerHealthBarPercent(CurrentHealth / MaxHealth);
+				PlayerHUD->SetPlayerHealthBarPercent(CurrentHealth / MaxHealth); //is able to set the health bar for a listen/dedicated server
 			}
 		}
 	}

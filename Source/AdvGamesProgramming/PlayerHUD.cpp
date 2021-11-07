@@ -17,7 +17,7 @@ APlayerHUD::APlayerHUD()
 
 	if (PlayerHUDClass)
 	{
-		CurrentPlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
+		CurrentPlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass); //spawn the playerHUD in gameplay
 		if (CurrentPlayerHUDWidget)
 		{
 			CurrentPlayerHUDWidget->AddToViewport();
@@ -34,6 +34,7 @@ APlayerHUD::APlayerHUD()
 
 	if (CurrentPlayerHUDWidget)
 	{
+		//cast the necessary UI features in c++ script
 		HealthProgressBar = Cast<UProgressBar>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("ProgHealthBar")));
 		RoundsRemainingText = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("RoundsRemaining")));
 		RoundsInMagazineText = Cast<UTextBlock>(CurrentPlayerHUDWidget->GetWidgetFromName(TEXT("RoundsInMagazine")));
@@ -46,7 +47,7 @@ void APlayerHUD::SetPlayerHealthBarPercent(float Percent)
 {
 	if (HealthProgressBar)
 	{
-		HealthProgressBar->SetPercent(Percent);
+		HealthProgressBar->SetPercent(Percent); //set the current health percentage to the health bar based on the implementation in health component c++ file 
 	}
 	else
 	{
@@ -58,7 +59,7 @@ void APlayerHUD::HideHUD()
 {
 	if (CurrentPlayerHUDWidget)
 	{
-		CurrentPlayerHUDWidget->RemoveFromViewport();
+		CurrentPlayerHUDWidget->RemoveFromViewport(); //hide HUD if the current widget exists for death mechanic
 	}
 }
 
@@ -66,7 +67,7 @@ void APlayerHUD::ShowHUD()
 {
 	if (CurrentPlayerHUDWidget)
 	{
-		CurrentPlayerHUDWidget->AddToViewport();
+		CurrentPlayerHUDWidget->AddToViewport(); //show HUD if the current widget exists for death mechanic
 	}
 }
 
@@ -74,7 +75,8 @@ void APlayerHUD::SetAmmoText(int32 RoundsRemaining, int32 RoundsInMagazine)
 {
 	if (RoundsRemainingText && RoundsInMagazineText)
 	{
-		RoundsRemainingText->SetText(FText::FromString(FString::Printf(TEXT("%i"), RoundsRemaining)));
+		//set the ammo/magazine count, which will then be called on blueprints to get the required data
+		RoundsRemainingText->SetText(FText::FromString(FString::Printf(TEXT("%i"), RoundsRemaining))); 
 		RoundsInMagazineText->SetText(FText::FromString(FString::Printf(TEXT("%i"), RoundsInMagazine)));
 	}
 }

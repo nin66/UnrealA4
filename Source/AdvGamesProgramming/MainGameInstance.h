@@ -13,6 +13,7 @@
 /**
  *
  */
+//This file is basically similar to the week 11 solution, however, due to existing problems when loading level from the menu, we decided to leave it as it is to show our attempt in getting it to work on c++
 UCLASS()
 class ADVGAMESPROGRAMMING_API UMainGameInstance : public UGameInstance
 {

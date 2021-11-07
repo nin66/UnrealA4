@@ -19,9 +19,7 @@ APlayerCharacter::APlayerCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//AutoPossessPlayer = EAutoReceiveInput::Player0;
-
-
+	
 	//assign to team '0', whereas enemy is team "1". Neutral and friendlies are false in the AI controller cpp for sight perception, and therefore only
 	//actors with a different id are "seen" and printed to the screen. Objects (no id) and friendles (same id) will be ignored to reduce the messages showing onscreen.
 	TeamId = FGenericTeamId(0);
@@ -31,6 +29,7 @@ APlayerCharacter::APlayerCharacter()
 	LookSensitivity = 1.0f;
 	SprintMultiplier = 1.5f;
 
+	//Modify movement speed for multiplayer, so that it doesn't look cluncky on listen/dedicated server
 	SprintMovementSpeed = GetCharacterMovement()->MaxWalkSpeed * SprintMultiplier;
 	NormalMovementSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
@@ -147,23 +146,23 @@ void APlayerCharacter::Turn(float Value)
 
 void APlayerCharacter::SprintStart()
 {
-	ServerSprintStart();
-	GetCharacterMovement()->MaxWalkSpeed = SprintMovementSpeed;
+	ServerSprintStart(); //RPC call for start of a spring
+	GetCharacterMovement()->MaxWalkSpeed = SprintMovementSpeed; //change the max walk speed for a sprint
 
 	if (AnimInstance)
 	{
-		AnimInstance->bIsSprinting = true;
+		AnimInstance->bIsSprinting = true; //indicates that it is sprinting
 	}
 }
 
 void APlayerCharacter::SprintEnd()
 {
-	ServerSprintEnd();
-	GetCharacterMovement()->MaxWalkSpeed = NormalMovementSpeed;
+	ServerSprintEnd(); //RPC call at the end of the sprint 
+	GetCharacterMovement()->MaxWalkSpeed = NormalMovementSpeed; //change the max walk speed for a walk
 
 	if (AnimInstance)
 	{
-		AnimInstance->bIsSprinting = false;
+		AnimInstance->bIsSprinting = false; //indicates that it isn't sprinting
 	}
 }
 
@@ -186,10 +185,10 @@ void APlayerCharacter::OnDeath()
 {
 	if (GetLocalRole() == ROLE_Authority)
 	{
-		AMultiplayerGameMode* MultiplayerGameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode());
+		AMultiplayerGameMode* MultiplayerGameMode = Cast<AMultiplayerGameMode>(GetWorld()->GetAuthGameMode()); //cast to a multiplayer game mode to activate the respawn method
 		if (MultiplayerGameMode)
 		{
-			MultiplayerGameMode->Respawn(GetController());
+			MultiplayerGameMode->Respawn(GetController()); //the player that died will start the respawn mechanic
 		}
 		else
 		{
@@ -203,12 +202,12 @@ void APlayerCharacter::SetPlayerHUDVisibility_Implementation(bool bHUDVisible)
 {
 	if (GetLocalRole() == ROLE_AutonomousProxy)
 	{
-		if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+		if (APlayerController* PlayerController = Cast<APlayerController>(GetController())) 
 		{
-			APlayerHUD* PlayerHUD = Cast<APlayerHUD>(PlayerController->GetHUD());
+			APlayerHUD* PlayerHUD = Cast<APlayerHUD>(PlayerController->GetHUD()); //get the HUD of the player that will respawn
 			if (PlayerHUD)
 			{
-				bHUDVisible ? PlayerHUD->ShowHUD() : PlayerHUD->HideHUD();
+				bHUDVisible ? PlayerHUD->ShowHUD() : PlayerHUD->HideHUD(); //set the player to either hide or show the HUD based on their death/respawn progress
 				UE_LOG(LogTemp, Warning, TEXT("Hiding the HUD"))
 			}
 			else

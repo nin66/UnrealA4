@@ -18,7 +18,9 @@ private:
 
 	TSubclassOf<class UUserWidget> PlayerHUDClass;
 	UUserWidget* CurrentPlayerHUDWidget;
-	class UProgressBar* HealthProgressBar;
+	class UProgressBar* HealthProgressBar; //to cast the health progress bar
+	
+	//to cast ammo/magazine count
 	class UTextBlock* RoundsInMagazineText;
 	UTextBlock* RoundsRemainingText;
 

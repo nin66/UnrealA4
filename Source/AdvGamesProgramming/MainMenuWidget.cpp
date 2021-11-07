@@ -12,7 +12,7 @@ void UMainMenuWidget::OnStartButtonPressed()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Start Button Pressed"))
 
-		//Attempt to create a new session
+		//the commented lines are an attempt to make it work on c++
 		if (UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetGameInstance()))
 		{
 			//GameInstance->CreateSession(TEXT("Test Session"));

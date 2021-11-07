@@ -13,11 +13,11 @@ AAutumnTree::AAutumnTree()
 	TreeLeaves = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tree Leaves"));
 	TreeLeaves->AttachTo(Tree); //attach the leaves to the tree 
 
-	//set the leaves to form a sphere 
+	//set the leaves as a sphere 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> LeavesAsset(TEXT("StaticMesh'/Engine/BasicShapes/Sphere.Sphere'"));
 	TreeLeaves->SetStaticMesh(LeavesAsset.Object);
 
-	//add the sakura material to the leaves so that the leaves are pink 
+	//add the autumn material to the leaves so that the leaves are orangish colour
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> AutumnMaterial(TEXT("MaterialInstanceConstant'/Game/Materials/PCGMaterials/Autumn/AutumnLandScapeMaterial_Inst.AutumnLandScapeMaterial_Inst'"));
 	TreeLeaves->SetMaterial(0, AutumnMaterial.Object);
 
