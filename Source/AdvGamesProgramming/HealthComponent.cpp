@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PlayerHUD.h"
 #include "PlayerCharacter.h"
+#include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -15,8 +16,6 @@ UHealthComponent::UHealthComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	MaxHealth = 100.0f;
-    
-
 	// ...
 }
 
@@ -27,7 +26,7 @@ void UHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentHealth = MaxHealth;
-	Score = 100;
+
 }
 
 
@@ -35,8 +34,7 @@ void UHealthComponent::BeginPlay()
 void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
-	// ...
+
 }
 
 void UHealthComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -54,12 +52,11 @@ void UHealthComponent::OnTakeDamage(float Damage)
 		CurrentHealth = 0;
 		OnDeath();
 	}
-	if (APawn* OwnerPawn = Cast<APawn>(GetOwner()))
+	if (APawn* Pawn = Cast<APawn>(GetOwner()))
 	{
-		if (GetOwner()->GetLocalRole() == ROLE_Authority && OwnerPawn->IsLocallyControlled())
+		if (GetOwner()->GetLocalRole() == ROLE_Authority && Pawn->IsLocallyControlled())
 		{
 			UpdateHealthBar();
-			
 		}
 	}
 }
@@ -70,24 +67,24 @@ void UHealthComponent::OnDeath()
 	if (PlayerCharacter)
 	{
 		PlayerCharacter->OnDeath();
-		
 	}
 }
 
 float UHealthComponent::HealthPercentageRemaining()
 {
-	return CurrentHealth/MaxHealth * 100.0f;
+	return CurrentHealth / MaxHealth * 100.0f;
 }
 
 void UHealthComponent::UpdateHealthBar()
 {
-	
-	if (GetOwner()->GetLocalRole() == ROLE_AutonomousProxy || (GetOwner()->GetLocalRole() == ROLE_Authority && Cast<APawn>(GetOwner())->IsLocallyControlled()))
-	{
-		APlayerHUD* PlayerHUD = Cast<APlayerHUD>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
-		if (IsValid(PlayerHUD))
+	if (APawn* Pawn = Cast<APawn>(GetOwner())) {
+		if (GetOwner()->GetLocalRole() == ROLE_AutonomousProxy || (GetOwner()->GetLocalRole() == ROLE_Authority && Pawn->IsLocallyControlled()))
 		{
-			PlayerHUD->SetPlayerHealthBarPercent(CurrentHealth / MaxHealth);
+			APlayerHUD* PlayerHUD = dynamic_cast<APlayerHUD*>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
+			if (PlayerHUD)
+			{
+				PlayerHUD->SetPlayerHealthBarPercent(CurrentHealth / MaxHealth);
+			}
 		}
 	}
 }

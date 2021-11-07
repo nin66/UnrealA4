@@ -21,7 +21,7 @@ private:
 	class UProgressBar* HealthProgressBar;
 	class UTextBlock* RoundsInMagazineText;
 	UTextBlock* RoundsRemainingText;
-	UTextBlock* PointScore;
+
 
 public:
 
