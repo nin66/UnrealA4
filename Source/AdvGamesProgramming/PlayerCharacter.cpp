@@ -21,7 +21,12 @@ APlayerCharacter::APlayerCharacter()
 
 	//AutoPossessPlayer = EAutoReceiveInput::Player0;
 
+
+	//assign to team '0', whereas enemy is team "1". Neutral and friendlies are false in the AI controller cpp for sight perception, and therefore only
+	//actors with a different id are "seen" and printed to the screen. Objects (no id) and friendles (same id) will be ignored to reduce the messages showing onscreen.
 	TeamId = FGenericTeamId(0);
+
+
 	//Set default member variable values
 	LookSensitivity = 1.0f;
 	SprintMultiplier = 1.5f;

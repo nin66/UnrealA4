@@ -36,7 +36,6 @@ public:
     //"OnMoveCompleted" Called on completing current movement request, override with custom instructions
     void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
 
-    void OnDeath();
 
 private:
     FTimerHandle TimerHandle;

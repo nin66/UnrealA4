@@ -42,8 +42,8 @@ ARandAIController::ARandAIController()
 //get a random target waypoint from the array with fmath random and cast the return value to correct type
 ATargetPoint* ARandAIController::GetRandomWaypoint()
 {
-	float index = FMath::RandRange(0, Waypoints.Num() - 1);
-	return Cast<ATargetPoint>(Waypoints[index]);
+	float Index = FMath::RandRange(0, Waypoints.Num() - 1);
+	return Cast<ATargetPoint>(Waypoints[Index]);
 }
 
 //moveTo makes AI go toward specified target goal actor and destination is constantly updated. no active path following
@@ -82,8 +82,4 @@ void ARandAIController::onTargetPerceptionUpdate(AActor* Actor, FAIStimulus Stim
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 }
 
-void ARandAIController::OnDeath()
-{
-
-}
 
