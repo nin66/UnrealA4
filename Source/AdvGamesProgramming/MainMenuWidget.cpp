@@ -15,7 +15,7 @@ void UMainMenuWidget::OnStartButtonPressed()
 		//Attempt to create a new session
 		if (UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetGameInstance()))
 		{
-			GameInstance->CreateSession(TEXT("Test Session"));
+			//GameInstance->CreateSession(TEXT("Test Session"));
 		}
 		else
 		{
@@ -28,7 +28,7 @@ void UMainMenuWidget::OnJoinButtonPressed()
 	UE_LOG(LogTemp, Warning, TEXT("Join Button Pressed"))
 		if (UMainGameInstance* GameInstance = Cast<UMainGameInstance>(GetGameInstance()))
 		{
-			GameInstance->FindSession(TEXT("Test Session"));
+			//GameInstance->FindSession(TEXT("Test Session"));
 
 		}
 		else
@@ -42,8 +42,8 @@ bool UMainMenuWidget::Initialize()
 	Super::Initialize();
 	if (ButtonStart && ButtonJoin)
 	{
-		ButtonStart->OnClicked.AddDynamic(this, &UMainMenuWidget::OnStartButtonPressed);
-		ButtonJoin->OnClicked.AddDynamic(this, &UMainMenuWidget::OnJoinButtonPressed);
+		//ButtonStart->OnClicked.AddDynamic(this, &UMainMenuWidget::OnStartButtonPressed);
+		//ButtonJoin->OnClicked.AddDynamic(this, &UMainMenuWidget::OnJoinButtonPressed);
 		return true;
 	}
 	return false;
