@@ -67,8 +67,7 @@ public:
 		void ResetModelVisibility();
 
 private:
-	//since a player is controlling a character that is of a certain team, the controller itself doesn’t have a team.
-	//therefore IGenericTeamAgentInterface interface is implemented in order to assign the character to a team (different team ID given to the to the AI)
+	//IGenericTeamAgentInterface interface is implemented in order to assign the character to a team (different team ID given to the to the AI)
 	FGenericTeamId TeamId;
 
 	UCameraComponent* Camera;
